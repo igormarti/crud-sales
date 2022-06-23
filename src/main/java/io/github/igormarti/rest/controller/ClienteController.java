@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +31,7 @@ public class ClienteController {
     }
 
     @PostMapping
-    public ResponseEntity<Cliente> save(@RequestBody Cliente cliente){
+    public ResponseEntity<Cliente> save(@RequestBody @Valid Cliente cliente){
         Cliente clienteObj = clientes.save(cliente);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
@@ -53,11 +54,11 @@ public class ClienteController {
 
     @PutMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@PathVariable Integer id, @RequestBody Cliente cliente){
+    public void update(@PathVariable Integer id, @RequestBody @Valid Cliente cliente){
         clientes.findById(id).map((clienteExistente) -> {
             cliente.setId(clienteExistente.getId());
             clientes.save(cliente);
-            return ResponseEntity.noContent().build();
+            return null;
         }).orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado.") );
     }
 

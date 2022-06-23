@@ -1,10 +1,19 @@
 package io.github.igormarti.domain.entity;
 
+import io.github.igormarti.domain.entity.enums.StatusPedido;
+import lombok.*;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.*;
 
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
 @Entity
 @Table(name = "pedido")
 public class Pedido {
@@ -25,54 +34,28 @@ public class Pedido {
     private BigDecimal total;
 
     @OneToMany(mappedBy = "pedido")
-    private List<ItemPedido> itens;
+    @ToString.Exclude
+    private List<ItemPedido> itens = new ArrayList<>();
 
-    public List<ItemPedido> getItens() {
-        return itens;
-    }
+    @Enumerated(EnumType.STRING)
+    private StatusPedido status = StatusPedido.REALIZADO;
 
-    public void setItens(List<ItemPedido> itens) {
-        this.itens = itens;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Cliente cliente) {
+    public Pedido(Cliente cliente, LocalDate dataPedido, BigDecimal total) {
         this.cliente = cliente;
-    }
-
-    public LocalDate getDataPedido() {
-        return dataPedido;
-    }
-
-    public void setDataPedido(LocalDate dataPedido) {
         this.dataPedido = dataPedido;
-    }
-
-    public BigDecimal getTotal() {
-        return total;
-    }
-
-    public void setTotal(BigDecimal total) {
         this.total = total;
     }
 
     @Override
-    public String toString() {
-        return "Pedido{" +
-                "id=" + id +
-                ", dataPedido=" + dataPedido +
-                ", total=" + total +
-                '}';
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Pedido pedido = (Pedido) o;
+        return id.equals(pedido.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
