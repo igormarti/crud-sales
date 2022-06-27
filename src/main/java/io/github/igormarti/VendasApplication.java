@@ -2,8 +2,10 @@ package io.github.igormarti;
 
 import io.github.igormarti.domain.entity.Cliente;
 import io.github.igormarti.domain.entity.Produto;
+import io.github.igormarti.domain.entity.Role;
 import io.github.igormarti.domain.repository.Clientes;
 import io.github.igormarti.domain.repository.Produtos;
+import io.github.igormarti.domain.repository.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -19,7 +21,8 @@ public class VendasApplication {
     @Bean
     public CommandLineRunner run(
             @Autowired Clientes clientes
-            , @Autowired Produtos produtos
+            , @Autowired Produtos produtos,
+            @Autowired Roles roles
             ){
         return args -> {
             Cliente igor = new Cliente("Igor Martins", "48326252093");
@@ -32,6 +35,10 @@ public class VendasApplication {
 
             produtos.saveAll(Arrays.asList(fogao,notebook));
 
+            Role admin = new Role("ROLE_ADMIN");
+            Role user = new Role("ROLE_USER");
+
+            roles.saveAll(Arrays.asList(admin,user));
         };
     }
 
