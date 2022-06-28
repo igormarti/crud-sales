@@ -59,6 +59,10 @@ public class JwtService {
         }
     }
 
+    public Long getExpiration(String token){
+        return getClaims(token).getExpiration().getTime();
+    }
+
     public String getLoginByToken(String token) throws ExpiredJwtException {
         return (String) getClaims(token).getSubject();
     }
